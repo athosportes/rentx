@@ -1,6 +1,7 @@
 import React from "react";
-import  AppLoading  from "expo-app-loading";
+import AppLoading from "expo-app-loading";
 import { ThemeProvider } from "styled-components";
+import { StatusBar } from "react-native";
 
 import {
   useFonts,
@@ -26,12 +27,17 @@ export default function App() {
     Archivo_600SemiBold,
   });
 
-  if(!fontsLoaded){
-    return <AppLoading />
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
 
   return (
     <ThemeProvider theme={theme}>
+      <StatusBar 
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <Home />
     </ThemeProvider>
   );
