@@ -9,7 +9,7 @@ export function Home(){
   return (
     <Container>
         <Title>
-            HOME
+          HOME
         </Title>
     </Container>
   );

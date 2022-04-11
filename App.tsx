@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from "react-native";
 import  AppLoading  from "expo-app-loading";
 import { ThemeProvider } from "styled-components";
 
@@ -15,7 +14,7 @@ import {
   Archivo_600SemiBold,
 } from "@expo-google-fonts/archivo";
 
-import theme from "./src/styles/theme.ts";
+import theme from "./src/styles/theme";
 import { Home } from "./src/screens/Home";
 
 export default function App() {
