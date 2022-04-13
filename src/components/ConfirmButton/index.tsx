@@ -6,14 +6,13 @@ import {
   Title
 } from './styles';
 
-interface Props extends RectButtonProps{
+interface Props extends RectButtonProps {
     title: string;
-    color?: string;
 }
 
-export function Button({ title, color, ...rest }: Props){
+export function ConfirmButton({ title, ...rest }: Props){
   return (
-    <Container color={color} {...rest}>
+    <Container {...rest}>
         <Title>{title}</Title>
     </Container>
   );

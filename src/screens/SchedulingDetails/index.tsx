@@ -28,14 +28,21 @@ import {
   Rent,
   Period,
   Price,
-  About,
   Acessories,
   Footer,
   RentalPeriod,
   CalendarIcon,
+  DateInfo,
+  DateTitle,
+  DateValue,
+  RentalPrice,
+  RentalPriceLabel,
+  RentalPriceDetails,
+  RentalPriceQuota,
+  RentalPriceTotal,
 } from "./styles";
-import theme from "../../styles/theme";
 
+import theme from "../../styles/theme";
 interface CarDetailsProps {
   description: {
     brand: string;
@@ -95,13 +102,37 @@ export function SchedulingDetails({ data }: Props) {
               color={theme.colors.shape}
             />
           </CalendarIcon>
+          <DateInfo>
+            <DateTitle>DE</DateTitle>
+            <DateValue>18/06/2021</DateValue>
+          </DateInfo>
+
+          <Feather 
+              name="chevron-right" 
+              size={RFValue(24)}
+              color={theme.colors.text}
+            />
+
+          <DateInfo>
+            <DateTitle>ATÉ</DateTitle>
+            <DateValue>18/06/2021</DateValue>
+          </DateInfo>
         </RentalPeriod>
+
+        <RentalPrice>
+          <RentalPriceLabel>Total</RentalPriceLabel>
+          <RentalPriceDetails>
+            <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
+            <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+          </RentalPriceDetails>
+        </RentalPrice>
       </Content>
 
 
         <Footer>
           <Button 
-            title="Confirmar"
+            title="Alugar agora"
+            color={theme.colors.success}
           />
         </Footer>
     </Container>
