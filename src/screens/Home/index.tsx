@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import Logo from "../../assets/logo.svg";
@@ -13,6 +14,7 @@ import {
 } from "./styles";
 
 export function Home() {
+  const navigation = useNavigation();
 
   const carDataOne = {
     brand: 'Audi',
@@ -33,6 +35,12 @@ export function Home() {
     },
     tumbnail: 'https://e7.pngegg.com/pngimages/911/192/png-clipart-porsche-macan-car-sport-utility-vehicle-snow-tire-porsche-compact-car-car.png'
   }
+
+  function handleCarDetails(){
+    navigation.navigate('CarDetails');
+   }
+
+
   return (
     <Container>
       <Header>
@@ -47,7 +55,8 @@ export function Home() {
       <CarList 
         data={[1,2,3,4,5,6,7,8,9]}
         keyExtractor={item => String(item)}
-        renderItem={({ item }) => <Car data={carDataOne}/>}
+        renderItem={({ item }) => 
+          <Car data={carDataOne} onPress={handleCarDetails}/>}
       />
 
       

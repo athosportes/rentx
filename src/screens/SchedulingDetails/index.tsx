@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+
 import { Feather } from '@expo/vector-icons';
 
 import { BackButton } from "../../components/BackButton";
@@ -59,6 +61,12 @@ interface Props {
 }
 
 export function SchedulingDetails({ data }: Props) {
+  const navigation = useNavigation();
+
+  function handleConfirmRental(){
+    navigation.navigate('SchedulingComplete');
+   }
+  
   return (
     <Container>
       <Header>
@@ -133,6 +141,7 @@ export function SchedulingDetails({ data }: Props) {
           <Button 
             title="Alugar agora"
             color={theme.colors.success}
+            onPress={handleConfirmRental}
           />
         </Footer>
     </Container>

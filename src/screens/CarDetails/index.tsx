@@ -1,16 +1,16 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
-import { Acessory } from '../../components/Acessory/index';
+import { Acessory } from "../../components/Acessory/index";
 import { Button } from "../../components/Button";
 
-import SpeedSvg from '../../assets/speed.svg'
-import AccelerationSvg from '../../assets/acceleration.svg'
-import ForceSvg from '../../assets/force.svg'
-import GasolineSvg from '../../assets/gasoline.svg'
-import ExchangeSvg from '../../assets/exchange.svg'
-import PeopleSvg from '../../assets/people.svg'
-
+import SpeedSvg from "../../assets/speed.svg";
+import AccelerationSvg from "../../assets/acceleration.svg";
+import ForceSvg from "../../assets/force.svg";
+import GasolineSvg from "../../assets/gasoline.svg";
+import ExchangeSvg from "../../assets/exchange.svg";
+import PeopleSvg from "../../assets/people.svg";
 
 import {
   Container,
@@ -26,7 +26,7 @@ import {
   Price,
   About,
   Acessories,
-  Footer
+  Footer,
 } from "./styles";
 
 interface CarDetailsProps {
@@ -45,12 +45,17 @@ interface Props {
 }
 
 export function CarDetails({ data }: Props) {
+  const navigation = useNavigation();
+
+  function handleConfirmRental() {
+    navigation.navigate("Scheduling");
+  }
+
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton />
       </Header>
-
       <CarImages>
         <ImageSlider
           imagesUrl={[
@@ -58,40 +63,37 @@ export function CarDetails({ data }: Props) {
           ]}
         />
       </CarImages>
-
       <Content>
         <Details>
           <Description>
             <Brand>Lamborghini</Brand>
             <Name>Huracan</Name>
           </Description>
-
-            <Rent>
-              <Period>Ao dia</Period>
-              <Price>R$ 580</Price>
-            </Rent>
+          <Rent>
+            <Period>Ao dia</Period>
+            <Price>R$ 580</Price>
+          </Rent>
         </Details>
         <Acessories>
-            <Acessory name="380Km/h" icon={SpeedSvg}/>
-            <Acessory name="3.2s" icon={AccelerationSvg}/>
-            <Acessory name="800 HP" icon={ForceSvg}/>
-            <Acessory name="Gasolina" icon={GasolineSvg}/>
-            <Acessory name="Auto" icon={ExchangeSvg}/>
-            <Acessory name="2 pessoas" icon={PeopleSvg}/>
+          <Acessory name="380Km/h" icon={SpeedSvg} />
+          <Acessory name="3.2s" icon={AccelerationSvg} />
+          <Acessory name="800 HP" icon={ForceSvg} />
+          <Acessory name="Gasolina" icon={GasolineSvg} />
+          <Acessory name="Auto" icon={ExchangeSvg} />
+          <Acessory name="2 pessoas" icon={PeopleSvg} />
         </Acessories>
-
-      <About>
-          Este é um automóvel desportivo, Surgiu do lendário 
-          touro de lide indultado na praça Real Maestranza de Sevilla. 
-          É um bellísimo carro para quem gosta de acelerar.
-      </About>
-
+        <About>
+          Este é um automóvel desportivo, Surgiu do lendário touro de lide
+          indultado na praça Real Maestranza de Sevilla. É um bellísimo carro
+          para quem gosta de acelerar.
+        </About>
       </Content>
-        <Footer>
-          <Button 
-            title="Confirmar"
-          />
-        </Footer>
+      <Footer>
+        <Button
+          title="Escolher período do aluguel"
+          onPress={handleConfirmRental}
+        />
+      </Footer>
     </Container>
   );
 }
