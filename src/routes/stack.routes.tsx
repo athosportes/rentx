@@ -7,6 +7,7 @@ import { Home } from '../screens/Home';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
+import { MyCars } from '../screens/MyCars';
 
 export function StackRoutes(){
   return(
@@ -35,7 +36,12 @@ export function StackRoutes(){
         name="SchedulingDetails"
         component={SchedulingDetails}
         options={{headerShown: false}}
-      />
+      /> 
+      <Screen 
+      name="MyCars"
+      component={MyCars}
+      options={{headerShown: false}}
+    />
     </Navigator>
 
   )

@@ -1,22 +1,27 @@
-import React from "react";
-import { useNavigation, CommonActions } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
+import {
+  useNavigation,
+  useRoute,
+  CommonActions,
+} from "@react-navigation/native";
 
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 
 import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
-import { Acessory } from '../../components/Acessory/index';
+import { Acessory } from "../../components/Acessory/index";
 import { Button } from "../../components/Button";
 
+import api from "../../services/api";
 import { RFValue } from "react-native-responsive-fontsize";
 
-import SpeedSvg from '../../assets/speed.svg'
-import AccelerationSvg from '../../assets/acceleration.svg'
-import ForceSvg from '../../assets/force.svg'
-import GasolineSvg from '../../assets/gasoline.svg'
-import ExchangeSvg from '../../assets/exchange.svg'
-import PeopleSvg from '../../assets/people.svg'
+import { format } from "date-fns";
+import theme from "../../styles/theme";
+import { CarDTO } from "../../dtos/CarDTO";
+import { getPlatformDate } from "../../utils/getPlatformDate";
 
+import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 
 import {
   Container,
@@ -44,7 +49,6 @@ import {
   RentalPriceTotal,
 } from "./styles";
 
-import theme from "../../styles/theme";
 interface CarDetailsProps {
   description: {
     brand: string;
@@ -60,97 +64,167 @@ interface Props {
   data: CarDetailsProps;
 }
 
+interface RentalPeriod {
+  startFormatted: string;
+  endFormatted: string;
+}
+interface Params {
+  car: CarDTO;
+  dates: string[];
+}
+
 export function SchedulingDetails({ data }: Props) {
+  const [loading, setLoading] = useState(false);
+
+  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
+    {} as RentalPeriod
+  );
   const navigation = useNavigation();
 
-  function handleConfirmRental(){
-    navigation.dispatch(CommonActions.navigate({
-      name: 'SchedulingComplete'
-    }))
-   }
+  const route = useRoute();
+  const { car, dates } = route.params as Params;
 
-   function handleBack() {
+  const rentalTotal = Number(dates.length * car.rent.price);
+
+  async function handleConfirmRental() {
+    const scheduleByCar = await api.get(`/schedules_bycars/${car.id}`);
+
+    const unavailable_dates = [
+      ...scheduleByCar.data.unavailable_dates,
+      ...dates,
+    ];
+
+    await api
+      .post("schedules_byuser", {
+        user_id: 1,
+        car,
+        startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+        endDate: format(
+          getPlatformDate(new Date(dates[dates.length - 1])),
+          "dd/MM/yyyy"
+        ),
+      })
+      .then(() => setLoading(true))
+      .catch(() => {
+        setLoading(false);
+        Alert.alert("Erro ao salvar agendamento.");
+      });
+
+    api
+      .put(`/schedules_bycars/${car.id}`, {
+        id: car.id,
+        unavailable_dates,
+      })
+      .then(() => {
+        setLoading(true);
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: "SchedulingComplete",
+            params: { car },
+          })
+        );
+      })
+      .catch(() => {
+        setLoading(false);
+        Alert.alert("Não foi possível salvar.");
+      });
+  }
+
+  function handleBack() {
     navigation.goBack();
   }
 
-  
+  useEffect(() => {
+    setRentalPeriod({
+      startFormatted: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+      endFormatted: format(
+        getPlatformDate(new Date(dates[dates.length - 1])),
+        "dd/MM/yyyy"
+      ),
+    });
+  }, []);
+
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {handleBack()}} />
+        <BackButton
+          onPress={() => {
+            handleBack();
+          }}
+        />
       </Header>
 
       <CarImages>
-        <ImageSlider
-          imagesUrl={[
-            "https://lh3.googleusercontent.com/N3nmvy1dVG78mZsSbpGbS1H1EpcqP3_GIc7WiqAsNuynAhNTkMMhsoljTRbVcM5RaFQ7aMisERVAYECZnVeRaIEQxMzYY5afKcqfVYGxeyouqjqrDXjP1NhU48IYPeJYF7cs6bLHY3w2rQeo0D8LFfa2iNNOPSa0SBPjianmz7hB8uyKyAswgnBjju-75pjfUFUdQKqiT4tTIMgz4S0_KHK1S6vgrErD88UDEUX5SAQFM53KJv37Qe34cuZivwMi-fuSwqPcbL_71JrJ4ZU_BvPIT2xS2YRjb8Qh7fnYmpNx3yRwLswVw6mFF3JME3KvN0X3MR99OAKd2qleM7ql05-DEAx7hAmNp-THFlIVui8XYx-q_bnrgTAZCiQG8T43fWQo980mFLIgt5BrrqwUOE_EzD1KaK_OeA5rPu-UAgqyyYYKq0S13f8p5QY-UWMdkPdn5-kxJI5DD2Aa2rY712A1RTsPvHvZQF0E_ErhUXPnz4AU5Cz1Ey3X1Vs6GiItraeagvgTfZYlzU6fqWBHkAv1iwsV6WNOcO5ozYAFn4AOqe7WolMsV-JVLW7nXtMD3FJ_bVRiCKSmBl8SDHTrfKERmBjq69n--kObfI9j8ZWFL_xRQA7pVAICbtaafbQ--xu97qypMwQ3SoIJOvlDrAbwX9jSy_bgq2uOC-2XYpo6rbS6VXme6H7o6Wxvbe8luaOI-sHh7er_7LMUVFG0BRlKN80VzvuP7UU4ukxcblqpLAx_RuMy-MfNbl6D_k3Ie5cdBnsIt9Qz-DSHeggdZJawzfHOmvvKQdZ5=w2232-h1674-no?authuser=0",
-          ]}
-        />
+        <ImageSlider imagesUrl={car.photos} />
       </CarImages>
 
       <Content>
         <Details>
           <Description>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Description>
 
-            <Rent>
-              <Period>Ao dia</Period>
-              <Price>R$ 580</Price>
-            </Rent>
+          <Rent>
+            <Period>{car.rent.period}</Period>
+            <Price>R$ {car.rent.price}</Price>
+          </Rent>
         </Details>
         <Acessories>
-            <Acessory name="380Km/h" icon={SpeedSvg}/>
-            <Acessory name="3.2s" icon={AccelerationSvg}/>
-            <Acessory name="800 HP" icon={ForceSvg}/>
-            <Acessory name="Gasolina" icon={GasolineSvg}/>
-            <Acessory name="Auto" icon={ExchangeSvg}/>
-            <Acessory name="2 pessoas" icon={PeopleSvg}/>
+          {car.accessories.map((acessory) => (
+            <Acessory
+              key={acessory.type}
+              name={acessory.name}
+              icon={getAccessoryIcon(acessory.type)}
+            />
+          ))}
         </Acessories>
 
         <RentalPeriod>
           <CalendarIcon>
-            <Feather 
-              name="calendar" 
+            <Feather
+              name="calendar"
               size={RFValue(24)}
               color={theme.colors.shape}
             />
           </CalendarIcon>
           <DateInfo>
             <DateTitle>DE</DateTitle>
-            <DateValue>18/06/2021</DateValue>
+            <DateValue>{rentalPeriod.startFormatted}</DateValue>
           </DateInfo>
 
-          <Feather 
-              name="chevron-right" 
-              size={RFValue(24)}
-              color={theme.colors.text}
-            />
+          <Feather
+            name="chevron-right"
+            size={RFValue(24)}
+            color={theme.colors.text}
+          />
 
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
-            <DateValue>18/06/2021</DateValue>
+            <DateValue>{rentalPeriod.endFormatted}</DateValue>
           </DateInfo>
         </RentalPeriod>
 
         <RentalPrice>
           <RentalPriceLabel>Total</RentalPriceLabel>
           <RentalPriceDetails>
-            <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
-            <RentalPriceTotal>R$ 2.900</RentalPriceTotal>
+            <RentalPriceQuota>
+              R$ {car.rent.price} x{dates.length} diárias
+            </RentalPriceQuota>
+            <RentalPriceTotal>R$ {rentalTotal}</RentalPriceTotal>
           </RentalPriceDetails>
         </RentalPrice>
       </Content>
 
-
-        <Footer>
-          <Button 
-            title="Alugar agora"
-            color={theme.colors.success}
-            onPress={handleConfirmRental}
-          />
-        </Footer>
+      <Footer>
+        <Button
+          title="Alugar agora"
+          color={theme.colors.success}
+          onPress={handleConfirmRental}
+          enabled={!loading}
+          loading={loading}
+        />
+      </Footer>
     </Container>
   );
 }

@@ -45,6 +45,7 @@ interface Params {
   car: CarDTO;
 }
 
+
 export function CarDetails({ data }: Props) {
   const navigation = useNavigation();
   const route = useRoute();
@@ -53,7 +54,8 @@ export function CarDetails({ data }: Props) {
 
   function handleConfirmRental() {
     navigation.dispatch(CommonActions.navigate({
-      name: 'Scheduling'
+      name: 'Scheduling',
+      params: { car }
     }))
   }
 
