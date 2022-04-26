@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useWindowDimensions, StatusBar } from "react-native";
 
 import LogoSvg from "../../assets/logo_background_gray.svg";
@@ -13,7 +13,9 @@ export function SchedulingComplete() {
   const navigation = useNavigation();
 
   function handleConfirmRental(){
-    navigation.navigate('Home');
+    navigation.dispatch(CommonActions.navigate({
+      name: 'Home'
+    }))
    }
   
   const { width } = useWindowDimensions();

@@ -8,7 +8,6 @@ import { Scheduling } from '../screens/Scheduling';
 import { SchedulingComplete } from '../screens/SchedulingComplete';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 
-
 export function StackRoutes(){
   return(
     <Navigator >

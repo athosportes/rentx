@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 import { Feather } from '@expo/vector-icons';
 
@@ -64,13 +64,20 @@ export function SchedulingDetails({ data }: Props) {
   const navigation = useNavigation();
 
   function handleConfirmRental(){
-    navigation.navigate('SchedulingComplete');
+    navigation.dispatch(CommonActions.navigate({
+      name: 'SchedulingComplete'
+    }))
    }
+
+   function handleBack() {
+    navigation.goBack();
+  }
+
   
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={() => {handleBack()}} />
       </Header>
 
       <CarImages>
