@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components';
 import { StatusBar, FlatList } from 'react-native';
 import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
-import { Load } from '../../components/Load';
+import { LoadAnimation } from '../../components/LoadAnimation';
 
 import { AntDesign } from '@expo/vector-icons';
 
@@ -81,7 +81,7 @@ export function MyCars(){
           Conforto, segurança e praticidade!
         </SubTitle>
       </Header>
-     { loading ? <Load /> : 
+     { loading ? <LoadAnimation /> : 
       <Content>
         <Appointments>
           <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
