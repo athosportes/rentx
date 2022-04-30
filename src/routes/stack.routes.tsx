@@ -14,7 +14,7 @@ import { SignUpFirstStep } from '../screens/SignUp/SignUpFirstStep';
 
 export function StackRoutes(){
   return(
-    <Navigator initialRouteName='SignIn'>
+    <Navigator initialRouteName='Home'>
       <Screen 
         name="SignIn"
         component={SignIn}
