@@ -1,4 +1,5 @@
 import React from "react";
+import { AppProvider } from "./src/hooks";
 import AppLoading from "expo-app-loading";
 import { ThemeProvider } from "styled-components";
 import { StatusBar } from "react-native";
@@ -20,6 +21,7 @@ import {
 import { Routes } from './src/routes';
 
 export default function App() {
+
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -39,7 +41,9 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <Routes />
+      <AppProvider>
+        <Routes />
+      </AppProvider>
     </ThemeProvider>
   );
 }

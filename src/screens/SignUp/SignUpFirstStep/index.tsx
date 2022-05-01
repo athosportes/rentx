@@ -23,6 +23,7 @@ import {
   FormTitle,
 } from "./styles";
 import { Button } from "../../../components/Button";
+import { useAuth } from "../../../hooks/auth";
 
 export function SignUpFirstStep() {
   const [name, setName] = useState("");
@@ -30,6 +31,8 @@ export function SignUpFirstStep() {
   const [driverLicense, setDriverLicense] = useState("");
 
   const navigation = useNavigation();
+  const { user } = useAuth();
+  console.log('USUÁRIO ANTENTICADO', user);
 
   function handleBack() {
     navigation.goBack();

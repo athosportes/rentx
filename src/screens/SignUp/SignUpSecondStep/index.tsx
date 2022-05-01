@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigation, CommonActions, useRoute } from "@react-navigation/native";
 import { BackButton } from "../../../components/BackButton";
 import { useTheme } from 'styled-components';
+import api from '../../../services/api';
 
 import {
   KeyboardAvoidingView,
@@ -47,7 +48,7 @@ export function SignUpSecondStep() {
     navigation.goBack();
   }
 
-  function handleRegister(){
+  async function handleRegister(){
     if(!password || !passwordConfirm) {
       return Alert.alert('Informe a senha e a confirmação')
     } 
@@ -56,14 +57,25 @@ export function SignUpSecondStep() {
       return Alert.alert('As senhas devem ser iguais')
     } 
 
-   navigation.dispatch(CommonActions.navigate({
-     name: 'Confirmation',
-     params: {
-       title: 'Conta criada',
-       message: `Agora é só fazer login\ne aproveitar`,
-       nextScreenRoute: 'SignIn'
-     }
-   }))
+    await api.post('/users', {
+      name: user.name,
+      email: user.email,
+      driver_license: user.driverLicense,
+      password
+    }).then(() => {
+      navigation.dispatch(CommonActions.navigate({
+        name: 'Confirmation',
+        params: {
+          title: 'Conta criada',
+          message: `Agora é só fazer login\ne aproveitar`,
+          nextScreenRoute: 'SignIn'
+        }
+      }))
+    }).catch((error) =>{
+      Alert.alert('Atenção!', 'Não foi possível cadastrar');
+    })
+
+   
   }
 
 
