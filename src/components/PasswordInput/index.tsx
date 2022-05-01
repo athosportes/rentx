@@ -18,7 +18,7 @@ interface Props extends TextInputProps {
 
  
 export function PasswordInput({ iconName, value, ...rest }: Props) {
-  const[isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const theme = useTheme();
 
   const [isFocused, setIsFocused] = useState(false);

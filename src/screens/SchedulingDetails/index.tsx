@@ -119,8 +119,14 @@ export function SchedulingDetails({ data }: Props) {
         setLoading(true);
         navigation.dispatch(
           CommonActions.navigate({
-            name: "SchedulingComplete",
-            params: { car },
+            name: "Confirmation",
+            params: { 
+              car, 
+              title: "Carro alugado!",
+              message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.`,
+              nextScreenRoute: "Home"
+            
+          },
           })
         );
       })

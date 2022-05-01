@@ -34,11 +34,12 @@ export function SignIn() {
   async function handleSingIn() {
     try {
       const schema = Yup.object().shape({
+        password: Yup.string().required("Senha obrigatória"),
+
         email: Yup.string()
           .required("E-mail obrigatório")
           .email("Digite um e-mail válido"),
 
-        password: Yup.string().required("Senha obrigatória"),
       });
 
       await schema.validate({ email, password });
@@ -47,7 +48,7 @@ export function SignIn() {
       Alert.alert(email, password)
     } catch (error) {
       if(error instanceof Yup.ValidationError){
-        Alert.alert('Erro', error.message)
+        Alert.alert('Atenção', error.message)
       } else {
         Alert.alert('Erro na autenticação', 
         'Ocorreu um erro ao realizar login, verifique suas credenciais.')
