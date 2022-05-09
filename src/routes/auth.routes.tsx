@@ -10,7 +10,7 @@ import { Confirmation } from "../screens/Confirmation";
 
 export function AuthRoutes() {
   return (
-    <Navigator initialRouteName="Home">
+    <Navigator initialRouteName="Splash">
       <Screen
         name="Splash"
         component={Splash}

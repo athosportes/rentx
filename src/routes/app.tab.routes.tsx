@@ -1,71 +1,62 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-const { Navigator, Screen } = createStackNavigator();
+import { Platform } from 'react-native';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useTheme } from "styled-components";
 
-import { CarDetails } from "../screens/CarDetails";
+import HomeSvg from '../assets/home.svg';
+import CarSvg from '../assets/car.svg';
+import PeopleSvg from '../assets/people.svg';
+
+import { AppStackRoutes } from "./app.stack.routes";
 import { Home } from "../screens/Home";
-import { Scheduling } from "../screens/Scheduling";
-import { Confirmation } from "../screens/Confirmation";
-import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { MyCars } from "../screens/MyCars";
-import { Splash } from "../screens/Splash";
-import { SignIn } from "../screens/SignIn/index";
-import { SignUpFirstStep } from "../screens/SignUp/SignUpFirstStep";
-import { SignUpSecondStep } from "../screens/SignUp/SignUpSecondStep";
 
-export function StackRoutes() {
+const { Navigator, Screen } = createBottomTabNavigator();
+
+export function AppTabRoutes() {
+  const theme = useTheme();
   return (
-    <Navigator initialRouteName="Home">
-      <Screen
-        name="SignIn"
-        component={SignIn}
-        options={{ headerShown: false }}
-      />
-      <Screen
-        name="SignUpFirstStep"
-        component={SignUpFirstStep}
-        options={{ headerShown: false }}
-      />
+    <Navigator
+     screenOptions={{
+       tabBarActiveTintColor: theme.colors.main,
+       tabBarInactiveTintColor: theme.colors.text_detail,
+       tabBarShowLabel: false,
+       tabBarStyle: {
+        paddingVertical: Platform.OS === 'ios' ? 20 : 0,
+        height: 78,
+        backgroundColor: theme.colors.background_primary
+       }
+     }}
+    >
       <Screen
         name="Home"
+        component={AppStackRoutes}
+        options={{
+          headerShown: false,
+          tabBarIcon: (({ color }) => (
+            <HomeSvg width={24} height={24} fill={color}/>
+          ))
+        }}
+      />
+      <Screen
+        name="Profile"
         component={Home}
         options={{
           headerShown: false,
-          gestureEnabled: false,
+          tabBarIcon: (({ color }) => (
+            <CarSvg width={24} height={24} fill={color}/>
+          ))
         }}
-      />
-      <Screen
-        name="SignUpSecondStep"
-        component={SignUpSecondStep}
-        options={{
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      />
-      <Screen
-        name="CarDetails"
-        component={CarDetails}
-        options={{ headerShown: false }}
-      />
-      <Screen
-        name="Scheduling"
-        component={Scheduling}
-        options={{ headerShown: false }}
-      />
-      <Screen
-        name="Confirmation"
-        component={Confirmation}
-        options={{ headerShown: false }}
-      />
-      <Screen
-        name="SchedulingDetails"
-        component={SchedulingDetails}
-        options={{ headerShown: false }}
       />
       <Screen
         name="MyCars"
         component={MyCars}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: (({ color }) => (
+            <PeopleSvg width={24} height={24} fill={color}/>
+          ))
+        }}
       />
     </Navigator>
   );
